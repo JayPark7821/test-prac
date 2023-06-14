@@ -4,6 +4,7 @@ import java.time.Clock;
 import java.util.UUID;
 
 import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
+import com.example.demo.common.service.port.ClockHolder;
 import com.example.demo.common.service.port.UuidHolder;
 
 import jakarta.persistence.Column;
@@ -58,7 +59,7 @@ public class User {
 			.build();
 	}
 
-	public User login(){
+	public User login(ClockHolder clockHolder){
 		return User.builder()
 			.id(this.id)
 			.email(this.email)
@@ -66,7 +67,7 @@ public class User {
 			.address(this.address)
 			.status(this.status)
 			.certificationCode(this.certificationCode)
-			.lastLoginAt(Clock.systemUTC().millis())
+			.lastLoginAt(clockHolder.millis())
 			.build();
 
 	}
