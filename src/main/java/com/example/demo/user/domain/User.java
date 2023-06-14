@@ -4,6 +4,7 @@ import java.time.Clock;
 import java.util.UUID;
 
 import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
+import com.example.demo.common.service.port.UuidHolder;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -35,13 +36,13 @@ public class User {
 		this.lastLoginAt = lastLoginAt;
 	}
 
-	public static User from(UserCreate userCreate) {
+	public static User from(UserCreate userCreate, UuidHolder uuidHolder) {
 		return  User.builder()
 			.email(userCreate.getEmail())
 			.nickname(userCreate.getNickname())
 			.address(userCreate.getAddress())
 			.status(UserStatus.PENDING)
-			.certificationCode(UUID.randomUUID().toString())
+			.certificationCode(uuidHolder.random())
 			.build();
 	}
 

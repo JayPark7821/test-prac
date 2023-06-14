@@ -1,7 +1,9 @@
 package com.example.demo.user.domain;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class UserTest {
@@ -9,8 +11,20 @@ class UserTest {
 	@Test
 	void UserCreate_객체로_생성할_수_있다() throws Exception{
 	    //given
+		UserCreate userCreate = UserCreate.builder()
+			.email("test@kakao.com")
+			.nickname("test")
+			.address("Pangyo")
+			.build();
 	    //when
+		User user = User.from(userCreate);
 	    //then
+		assertThat(user.getId()).isEqualTo(0L);
+		assertThat(user.getEmail()).isEqualTo("test@kakao.com");
+		assertThat(user.getNickname()).isEqualTo("test");
+		assertThat(user.getAddress()).isEqualTo("Pangyo");
+		assertThat(user.getStatus()).isEqualTo(UserStatus.PENDING);
+		assertThat(user.getCertificationCode()).isEqualTo();
 	}
 	@Test
 	void UserUpdate_객체로_수정_수_있다() throws Exception{

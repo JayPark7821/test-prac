@@ -2,6 +2,7 @@ package com.example.demo.user.service;
 
 import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
 import com.example.demo.common.domain.exception.ResourceNotFoundException;
+import com.example.demo.common.service.port.UuidHolder;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.UserCreate;
@@ -23,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CertificationService certificationService;
+    private final UuidHolder uuidHolder;
 
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
@@ -36,7 +38,7 @@ public class UserService {
 
     @Transactional
     public User create(UserCreate userCreate) {
-        final User user = User.from(userCreate);
+        final User user = User.from(userCreate, uuidHolder);
         final User savedUser = userRepository.save(user);
         certificationService.send(savedUser.getEmail(), savedUser.getId(), savedUser.getCertificationCode());
         return savedUser;
