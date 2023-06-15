@@ -1,43 +1,43 @@
 package com.example.demo.user.service;
 
-import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
 import com.example.demo.common.domain.exception.ResourceNotFoundException;
 import com.example.demo.common.service.port.ClockHolder;
 import com.example.demo.common.service.port.UuidHolder;
+import com.example.demo.user.controller.port.CertificationService;
+import com.example.demo.user.controller.port.UserService;
 import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserStatus;
 import com.example.demo.user.domain.UserCreate;
 import com.example.demo.user.domain.UserUpdate;
-import com.example.demo.user.infrastructure.UserEntity;
 import com.example.demo.user.service.port.UserRepository;
 
-import java.time.Clock;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final CertificationService certificationService;
     private final UuidHolder uuidHolder;
     private final ClockHolder clockHolder;
 
+    @Override
     public User getByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", email));
     }
 
+    @Override
     public User getById(long id) {
         return userRepository.findByIdAndStatus(id, UserStatus.ACTIVE)
             .orElseThrow(() -> new ResourceNotFoundException("Users", id));
     }
 
+    @Override
     @Transactional
     public User create(UserCreate userCreate) {
         final User user = User.from(userCreate, uuidHolder);
@@ -46,6 +46,7 @@ public class UserService {
         return savedUser;
     }
 
+    @Override
     @Transactional
     public User update(long id, UserUpdate userUpdate) {
         final User user = getById(id);
@@ -54,6 +55,7 @@ public class UserService {
         return userRepository.save(updatedUser);
     }
 
+    @Override
     @Transactional
     public void login(long id) {
         final User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));
@@ -62,6 +64,7 @@ public class UserService {
 
     }
 
+    @Override
     @Transactional
     public void verifyEmail(long id, String certificationCode) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Users", id));

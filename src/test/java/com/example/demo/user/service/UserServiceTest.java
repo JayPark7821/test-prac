@@ -1,19 +1,9 @@
 package com.example.demo.user.service;
 
 import static org.assertj.core.api.AssertionsForClassTypes.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlGroup;
 
 import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
 import com.example.demo.common.domain.exception.ResourceNotFoundException;
@@ -28,15 +18,15 @@ import com.example.demo.user.domain.UserUpdate;
 
 public class UserServiceTest {
 
-	private UserService userService;
+	private UserServiceImpl userService;
 
 	@BeforeEach
 	void init() {
 
 		final FakeUserRepository fakeUserRepository = new FakeUserRepository();
-		this.userService = new UserService(
+		this.userService = new UserServiceImpl(
 			fakeUserRepository,
-			new CertificationService(new FakeMailSender()),
+			new CertificationServiceImpl(new FakeMailSender()),
 			new TestUuidHolder("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab"),
 			new TestClockHolder(17L));
 

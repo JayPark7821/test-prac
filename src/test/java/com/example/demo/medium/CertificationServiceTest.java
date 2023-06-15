@@ -1,13 +1,11 @@
 package com.example.demo.medium;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import com.example.demo.mock.FakeMailSender;
-import com.example.demo.user.service.CertificationService;
+import com.example.demo.user.service.CertificationServiceImpl;
 
 class CertificationServiceTest {
 
@@ -15,7 +13,7 @@ class CertificationServiceTest {
 	void 이메일과_컨텐츠가_제대로_만들어져서_보내지는지_테스트한다() throws Exception{
 	    //given
 		final FakeMailSender mailSender = new FakeMailSender();
-		CertificationService certificationService = new CertificationService(mailSender);
+		CertificationServiceImpl certificationService = new CertificationServiceImpl(mailSender);
 	    //when
 		certificationService.send("kok202@naver.com", 1, "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
 	    
