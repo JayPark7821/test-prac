@@ -13,8 +13,10 @@ import com.example.demo.user.domain.User;
 import com.example.demo.user.domain.UserCreate;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
+@Builder
 @Tag(name = "유저(users)")
 @RestController
 @RequestMapping("/api/users")

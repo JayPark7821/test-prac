@@ -1,51 +1,41 @@
 package com.example.demo.user.controller;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.BDDMockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.Sql.ExecutionPhase;
-import org.springframework.test.context.jdbc.SqlGroup;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 
+import com.example.demo.mock.TestContainer;
+import com.example.demo.user.controller.response.UserResponse;
 import com.example.demo.user.domain.UserCreate;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 public class UserCreateControllerTest {
 
-    @Test
-    void 사용자는_회원_가입을_할_수있고_회원가입된_사용자는_PENDING_상태이다() throws Exception {
-        // given
-        UserCreate userCreate = UserCreate.builder()
-            .email("kok202@kakao.com")
-            .nickname("kok202")
-            .address("Pangyo")
-            .build();
-        BDDMockito.doNothing().when(mailSender).send(any(SimpleMailMessage.class));
+	@Test
+	void 사용자는_회원_가입을_할_수있고_회원가입된_사용자는_PENDING_상태이다() throws Exception {
+		// given
+		final TestContainer testContainer = TestContainer.builder()
+			.uuidHolder(() -> "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab")
+			.build();
+		final UserCreate userCreate = UserCreate.builder()
+			.address("Seoul")
+			.nickname("kok202")
+			.email("test@gmail.com")
+			.build();
 
-        // when
-        // then
-        mockMvc.perform(
-            post("/api/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(userCreate)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id").isNumber())
-            .andExpect(jsonPath("$.email").value("kok202@kakao.com"))
-            .andExpect(jsonPath("$.nickname").value("kok202"))
-            .andExpect(jsonPath("$.status").value("PENDING"));
-    }
+		// when
+		ResponseEntity<UserResponse> result = testContainer.userCreateController.createUser(userCreate);
+
+		// then
+		assertThat(result.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(201));
+		assertThat(result.getBody()).isNotNull();
+		assertThat(result.getBody().getEmail()).isEqualTo("test@gmail.com");
+		assertThat(result.getBody().getNickname()).isEqualTo("kok202");
+		assertThat(result.getBody().getLastLoginAt()).isNull();
+		assertThat(testContainer.userRepository.getById(1).getCertificationCode()).isEqualTo(
+			"aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaab");
+
+	}
 
 }

@@ -1,17 +1,8 @@
 package com.example.demo.medium;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
-import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
-import com.example.demo.common.domain.exception.ResourceNotFoundException;
-import com.example.demo.user.domain.User;
-import com.example.demo.user.domain.UserStatus;
-import com.example.demo.user.domain.UserCreate;
-import com.example.demo.user.domain.UserUpdate;
-import com.example.demo.user.service.UserServiceImpl;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +13,14 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
+
+import com.example.demo.common.domain.exception.CertificationCodeNotMatchedException;
+import com.example.demo.common.domain.exception.ResourceNotFoundException;
+import com.example.demo.user.domain.User;
+import com.example.demo.user.domain.UserCreate;
+import com.example.demo.user.domain.UserStatus;
+import com.example.demo.user.domain.UserUpdate;
+import com.example.demo.user.service.UserServiceImpl;
 
 @SpringBootTest
 @TestPropertySource("classpath:test-application.properties")
@@ -149,7 +148,5 @@ public class UserServiceTest {
 			userService.verifyEmail(2, "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaac");
 		}).isInstanceOf(CertificationCodeNotMatchedException.class);
 	}
-
-
 
 }
