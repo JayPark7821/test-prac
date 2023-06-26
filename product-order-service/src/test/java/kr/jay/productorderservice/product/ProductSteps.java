@@ -33,4 +33,8 @@ public class ProductSteps {
 			.extract();
 		return response;
 	}
+
+	public static UpdateProductRequest 상품수정_요청() {
+		return new UpdateProductRequest("상품 수정", 20000, DiscountPolicy.NONE);
+	}
 }
