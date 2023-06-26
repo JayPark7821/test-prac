@@ -1,5 +1,7 @@
 package kr.jay.productorderservice.product;
 
+import org.springframework.stereotype.Component;
+
 /**
  * ProductAdapter
  *
@@ -7,6 +9,7 @@ package kr.jay.productorderservice.product;
  * @version 1.0.0
  * @since 2023/06/25
  */
+@Component
 class ProductAdapter implements ProductPort {
 	private final ProductRepository productRepository;
 
