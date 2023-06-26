@@ -27,8 +27,15 @@ class ProductApiTest extends ApiTest {
 
 	@Test
 	void 상품등록() {
-		final AddProductRequest request = 상품등록요청_생성();
+		final var request = 상품등록요청_생성();
 
+		final var response = 상품등록요청(request);
+
+		assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
+
+	}
+
+	private static ExtractableResponse<Response> 상품등록요청(final AddProductRequest request) {
 		final ExtractableResponse<Response> response = RestAssured.given()
 			.log()
 			.all()
@@ -40,9 +47,7 @@ class ProductApiTest extends ApiTest {
 			.log()
 			.all()
 			.extract();
-
-		assertThat(response.statusCode()).isEqualTo(HttpStatus.CREATED.value());
-
+		return response;
 	}
 
 	private static AddProductRequest 상품등록요청_생성() {
