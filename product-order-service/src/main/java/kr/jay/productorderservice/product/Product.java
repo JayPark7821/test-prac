@@ -1,6 +1,16 @@
 package kr.jay.productorderservice.product;
 
+import static javax.persistence.GenerationType.*;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.springframework.util.Assert;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * Product
@@ -9,11 +19,19 @@ import org.springframework.util.Assert;
  * @version 1.0.0
  * @since 2023/06/25
  */
+
+@Entity
+@Table(name = "products")
+@Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 class Product {
+
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
-	private final String productName;
-	private final int price;
-	private final DiscountPolicy discountPolicy;
+	private String productName;
+	private int price;
+	private DiscountPolicy discountPolicy;
 
 	public Product(final String productName, final int price, final DiscountPolicy discountPolicy) {
 		Assert.hasText(productName, "상품명은 필수입니다.");
@@ -25,11 +43,4 @@ class Product {
 		this.discountPolicy = discountPolicy;
 	}
 
-	public void assignId(final Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
 }
