@@ -6,9 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import io.restassured.RestAssured;
-import io.restassured.response.ExtractableResponse;
-import io.restassured.response.Response;
 import kr.jay.productorderservice.ApiTest;
 
 /**
@@ -38,14 +35,11 @@ class ProductApiTest extends ApiTest {
 	void 상품조회() {
 		ProductSteps.상품등록요청(ProductSteps.상품등록요청_생성());
 		final Long productId = 1L;
-
-		final ExtractableResponse<Response> response = RestAssured.given().log().all()
-			.when()
-			.get("/products/{productId}", productId)
-			.then().log().all()
-			.extract();
+		
+		final var response = ProductSteps.상품조회요청(productId);
 
 		assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.jsonPath().getString("name")).isEqualTo("상품명");
 	}
+
 }
